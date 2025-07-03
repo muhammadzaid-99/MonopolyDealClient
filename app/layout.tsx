@@ -2,6 +2,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { SocketProvider } from "@/lib/SocketProvider";
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: 'CashDeal - Monopoly Deal',
@@ -17,7 +18,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <SocketProvider>{children}</SocketProvider>
+        <SocketProvider>
+          <Suspense fallback={<div>Loading...</div>}>
+            {children}
+          </Suspense>
+        </SocketProvider>
       </body>
     </html>
   )
