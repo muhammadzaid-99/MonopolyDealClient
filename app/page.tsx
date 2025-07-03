@@ -115,8 +115,9 @@ export default function HomePage() {
               Join Room
             </Button>
           </div>
-          <div className="flex w-full space-y-1 items-center justify-center">
-            <Link href="http://monopolydealrules.com" className="text-xs underline">How to play?</Link>
+          <div className="flex w-full space-y-1 items-center justify-center gap-2">
+            <Link href="http://monopolydealrules.com" rel="noopener noreferrer" target="_blank" className="text-xs underline">How to play?</Link>
+            <Link href="http://github.com/muhammadzaid-99" rel="noopener noreferrer" target="_blank" className="text-xs underline">Developer</Link>
           </div>
         </CardContent>
       </Card>
