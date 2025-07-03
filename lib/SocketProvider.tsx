@@ -2,7 +2,6 @@
 
 import { Action } from "@/app/game/page";
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react";
-import { getServerHostName } from "./server";
 
 type SocketContextType = {
     socket: WebSocket | null;
