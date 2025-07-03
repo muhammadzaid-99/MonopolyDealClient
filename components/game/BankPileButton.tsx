@@ -26,17 +26,17 @@ export function BankPileButton({ count, value, cards = [] }: BankPileButtonProps
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <button className="text-xs px-2 py-1 rounded-md bg-white border shadow-sm">
-          <div className="flex flex-col items-center leading-tight min-w-12">
+        <button className="h-md:text-xs text-[10px] px-2 py-1 rounded-md bg-white border shadow-sm">
+          <div className="flex h-md:flex-col items-center max-h-md:justify-between leading-tight h-md:min-w-12 min-w-8 max-h-md:h-4">
             <span>{count}</span>
             <span className="">${value}</span>
           </div>
         </button>
       </PopoverTrigger>
 
-      <PopoverContent className="w-[430px]">
-        <ScrollArea className="w-full whitespace-nowrap">
-          <div className="flex gap-2 px-2 pb-4">
+      <PopoverContent className="h-md:w-[430px] w-[300px]">
+        <ScrollArea className="w-full whitespace-nowrap max-h-md:-m-3.5">
+          <div className="flex gap-2 px-2 pb-4 max-h-md:scale-[0.675] max-h-md:-my-5 max-h-md:-mx-10">
             {cards.map((c, i) => (
               <GameCardSelectable key={i} {...c} ClickEvent={ClickEvent} />
             ))}

@@ -69,7 +69,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-100 to-blue-100 flex items-center justify-center p-4">
+    <div className="h-dvh bg-gradient-to-br from-green-100 to-blue-100 flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-bold text-green-800">Monopoly Deal</CardTitle>

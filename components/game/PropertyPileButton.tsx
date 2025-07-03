@@ -68,14 +68,14 @@ export function PropertyPileButton({ owner_id, pile, looseCards, isForLoose }: P
     <Popover>
       <PopoverTrigger asChild>
         {isForLoose ? (
-          <button className="text-xs px-2 py-1 rounded-md shadow-sm w-16 h-16 bg-gray-200" onClick={(e) => { selectedCardID && e.preventDefault(); HandleMoveProperty() }}>
-            <div className="flex flex-col items-center leading-tight text-black">
+          <button className="h-md:text-xs text-[10px] px-2 py-1 rounded-md shadow-sm w-12 h-md:w-16 h-md:h-16 h-14 bg-gray-200" onClick={(e) => { selectedCardID && e.preventDefault(); HandleMoveProperty() }}>
+            <div className="flex flex-col  items-center leading-tight text-black">
               <span>{looseCards?.length}</span>
-              <span className="text-[8px] tracking-widest">LOOSE</span>
+              <span className="h-md:text-[8px] text-[7px] tracking-widest">LOOSE</span>
             </div>
           </button>
         ) : (
-          <button className="text-xs px-2 py-1 rounded-md border shadow-sm w-9 h-16"
+          <button className="h-md:text-xs text-[10px] px-2 py-1 rounded-md border shadow-sm w-9 h-md:w-14 h-md:h-16 h-14"
             style={{ backgroundColor: propertyColorToColor(pile?.color || "") }}
             onClick={(e) => {
               if (action == Action.SelectOpponentSet || action == Action.SelectYourPropertySet || action == Action.SelectYourPropertySetAndOpponent) {
@@ -91,11 +91,11 @@ export function PropertyPileButton({ owner_id, pile, looseCards, isForLoose }: P
             <div className="flex flex-col items-center leading-tight text-white relative">
               <span>{pile?.cards?.length}</span>
               <span>${pile?.rent}</span>
-              <div className={clsx("rounded-full h-2 min-w-5 px-1 mt-1 shadow", {
+              <div className={clsx("rounded-full h-2 h-md:min-w-5 w-2 px-1 mt-1 shadow", {
                 "bg-pink-300": pile?.hotel,
                 "bg-emerald-300": !pile?.hotel && pile?.house,
                 "bg-yellow-200": !pile?.hotel && !pile?.house && pile?.complete,
-                "invisible": !pile?.hotel && !pile?.house && !pile?.complete,
+                "hidden": !pile?.hotel && !pile?.house && !pile?.complete,
               })}  />
 
               {/* <span
@@ -110,10 +110,10 @@ export function PropertyPileButton({ owner_id, pile, looseCards, isForLoose }: P
         )}
       </PopoverTrigger>
 
-      <PopoverContent className="w-[430px]">
+      <PopoverContent className="h-md:w-[430px] w-[300px]">
         {isForLoose ? (
-          <ScrollArea className="w-full whitespace-nowrap">
-            <div className="flex gap-2 px-2 pb-4">
+          <ScrollArea className="w-full whitespace-nowrap max-h-md:-m-3.5">
+            <div className="flex gap-2 px-2 pb-4 max-h-md:scale-[0.675] max-h-md:-my-5 max-h-md:-mx-10">
               {looseCards?.map((c, i) => (
                 <GameCardSelectable key={i} {...c} ClickEvent={HandleSelectProperty} />
               ))}
@@ -122,8 +122,8 @@ export function PropertyPileButton({ owner_id, pile, looseCards, isForLoose }: P
           </ScrollArea>
         ) : (
           pile?.color ? (
-            <ScrollArea className="w-full whitespace-nowrap">
-              <div className="flex gap-2 px-2 pb-4">
+            <ScrollArea className="w-full whitespace-nowrap max-h-md:-m-3.5">
+              <div className="flex gap-2 px-2 pb-4 max-h-md:scale-[0.675] max-h-md:-my-5 max-h-md:-mx-10">
                 {pile?.cards?.map((c, i) => (
                   <GameCardSelectable key={i} {...c} ClickEvent={HandleSelectProperty} />
                 ))}
@@ -131,8 +131,8 @@ export function PropertyPileButton({ owner_id, pile, looseCards, isForLoose }: P
               <ScrollBar orientation="horizontal" />
             </ScrollArea>
           ) : (
-            <ScrollArea className="w-full whitespace-nowrap">
-              <div className="flex gap-2 px-2 pb-4">
+            <ScrollArea className="w-full whitespace-nowrap max-h-md:-m-3.5">
+              <div className="flex gap-2 px-2 pb-4 max-h-md:scale-[0.675] max-h-md:-my-5 max-h-md:-mx-10">
                 {propertyColors.map((color) => (
                   <button
                     key={color}

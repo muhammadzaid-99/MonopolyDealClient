@@ -32,7 +32,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
         // const hostname = window.location.hostname;
         // socketRef.current = new WebSocket(`ws://${hostname}:4040`);
         const host = process.env.NEXT_PUBLIC_SERVER_HOST_NAME
-        socketRef.current = new WebSocket(`wss://${host}/`);
+        socketRef.current = new WebSocket(`ws://${host}/`);
 
         socketRef.current.onopen = () => {
             console.log("WebSocket connected");

@@ -229,10 +229,10 @@ export function GameCardSelectable({
 
     return (
         <div
-            className={clsx("cursor-pointer transition-all ease-in-out bg-white relative z-50", (id === selectedCardID) && "animate-pulse translate-y-2 scale-110")}
+            className={clsx("cursor-pointer transition-all ease-in-out", (id === selectedCardID) && "animate-pulse translate-y-2 scale-110")}
             onClick={HandleClick}
         >
-            <div className="select-none w-[90px] h-[130px] min-w-[90px] rounded-md border border-gray-200 shadow-md ">
+            <div className="select-none w-[90px] h-[130px] min-w-[90px] bg-white rounded-md border border-gray-200 shadow-md">
                 {renderContent()}
             </div>
         </div>

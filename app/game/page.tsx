@@ -196,15 +196,14 @@ export default function GameRoom() {
     }, [socket, router]);
 
     return (
-        <div className="w-full h-screen p-2 bg-muted">
-            <div className="w-full h-full rounded-lg overflow-auto border">
+        <div className="w-full h-dvh p-2 bg-muted game-container ">
+            <div className="w-full h-full max-h-dvh rounded-lg border  overflow-scroll">
                 <div className="flex flex-col h-full">
-
                     <div className="flex-[2] grid grid-cols-3 grid-rows-2 gap-2 p-2">
                         {Array.from({ length: 6 }).map((_, i) => {
                             if (i === 1) {
                                 return (
-                                    <div key={i} className={`bg-muted rounded-md border row-span-2 ${selectedCardID !== null && "ring-2 hover:bg-sky-100 cursor-pointer"}`} onClick={(e) => { e.stopPropagation(); HandlePlayCard("DiscardPile") }}>
+                                    <div key={i} className={`bg-muted rounded-md border row-span-2 max-h-md:scale-90 max-h-md:-m-3.5 ${selectedCardID !== null && "ring-2 hover:bg-sky-100 cursor-pointer"}`} onClick={(e) => { e.stopPropagation(); HandlePlayCard("DiscardPile") }}>
                                         <CenterPiles {...gameInfo} />
                                     </div>
                                 )
@@ -217,27 +216,27 @@ export default function GameRoom() {
                             const player = players[player_index] // skip index 2,4 (center)
 
                             if (!player) {
-                                return (
-                                    <div key={i} className="bg-muted rounded-md border flex items-center justify-center text-xs text-muted-foreground">
-                                        Player
-                                    </div>
-                                )
+                                return
                             }
 
                             return (
-                                <div key={i} className={`bg-card rounded-md border shadow-sm p-1 flex flex-col gap-2 ${(action == Action.SelectOpponent || action == Action.SelectYourPropertySetAndOpponent) && "ring-2 hover:bg-sky-100 cursor-pointer"}`} onClick={() => HandleSelectOpponent(player.ID)}>
+                                <div key={i} className={`bg-card rounded-md border shadow-sm p-1 flex flex-col gap-2 max-h-md:scale-90 max-h-md:-m-3.5 ${players?.length < 3 && "row-span-2"} ${(action == Action.SelectOpponent || action == Action.SelectYourPropertySetAndOpponent) && "ring-2 hover:bg-sky-100 cursor-pointer"}`} onClick={() => HandleSelectOpponent(player.ID)}>
                                     <div className="flex justify-between items-center w-full">
-                                        <div className="font-bold text-lg px-2">
-                                            {player.Name} {player?.HandCount ? (<span className="font-semibold text-xs px-2">{player.HandCount} cards in hand</span>) : (<></>)}
+                                        <div className="font-bold h-md:text-lg text-sm px-2">
+                                            <span>{player.Name} </span>{player?.HandCount ? (<>
+                                                <span className="font-semibold text-xs px-2 max-h-md:hidden">{player.HandCount} cards in hand</span>
+                                                <span className="font-normal text-xs px-2 h-md:hidden">Hand: {player.HandCount}</span>
+                                            </>
+                                            ) : (<></>)}
                                         </div>
                                         {player.ID === gameInfo?.current_turn_player_id && (
                                             <div className="font-bold text-lg flex gap-1">
                                                 <div className="flex gap-1 items-center">
                                                     {gameInfo?.plays_remaining ? (Array.from({ length: gameInfo?.plays_remaining }).map((_, i) => (
-                                                        <Badge key={i} className="bg-blue-700 rounded-full h-5 min-w-5 px-1" />
+                                                        <Badge key={i} className="bg-blue-700 rounded-full h-md:h-5 h-md:min-w-5 h-3 min-w-3 px-1" />
                                                     ))) : (<></>)}
                                                 </div>
-                                                <Badge variant="default" className="select-none hover:bg-blue-700 bg-blue-700">
+                                                <Badge variant="default" className= "max-h-md:hidden select-none hover:bg-blue-700 bg-blue-700">
                                                     CURRENT TURN
                                                 </Badge>
                                             </div>
@@ -308,36 +307,42 @@ export default function GameRoom() {
                     <Separator />
 
                     {/* Bottom 1/3 Area: Resizable Left and Right Panels */}
-                    <div className="flex-[1] p-2">
-                        <ResizablePanelGroup direction="horizontal">
-                            <ResizablePanel defaultSize={50} minSize={30}>
-                                <div className="h-full w-full bg-card rounded-md border shadow-sm p-2 flex flex-col">
+                    <div className="flex-[1] h-md:p-2">
+                        <ResizablePanelGroup direction="horizontal" className="">
+                            <ResizablePanel defaultSize={50} minSize={40} className= "max-h-md:-m-2">
+                                <div className="h-full w-full bg-card rounded-md border shadow-sm p-2  flex flex-col max-h-md:scale-90">
                                     <div className="flex justify-between items-center">
-                                        <div className="font-bold text-lg">
-                                            {currentPlayer?.Name}  {currentPlayer?.HandCount ? (<span className="font-semibold text-xs px-2">{currentPlayer.HandCount} cards in hand</span>) : (<></>)}
+                                        <div className="font-bold h-md:text-lg text-sm">
+                                            <span>
+                                                {currentPlayer?.Name}
+                                            </span>  {currentPlayer?.HandCount ? (<>
+                                                <span className="font-semibold text-xs px-2 max-h-md:hidden">{currentPlayer.HandCount} cards in hand</span>
+                                                <span className="font-normal text-xs px-2 h-md:hidden">Hand: {currentPlayer.HandCount}</span>
+                                            </>
+                                            ) : (<></>)}
                                         </div>
                                         {currentPlayer?.ID === gameInfo?.current_turn_player_id && (
                                             <div className="flex gap-1">
                                                 <div className="flex gap-2">
                                                     <div className="flex gap-1 items-center">
                                                         {gameInfo?.plays_remaining ? (Array.from({ length: gameInfo?.plays_remaining }).map((_, i) => (
-                                                            <Badge key={i} className="bg-blue-700 rounded-full h-5 min-w-5 px-1" />
+                                                            <Badge key={i} className="bg-blue-700 rounded-full h-md:h-5 h-md:min-w-5 h-3 min-w-3 px-1" />
                                                         ))) : (<></>)}
                                                     </div>
                                                     {/* <Badge variant="default" className="select-none hover:bg-blue-700 bg-blue-700">
                                                         YOUR TURN
                                                     </Badge> */}
                                                 </div>
-                                                <Button variant="default" disabled={!gameInfo?.turn_cards_drawn} onClick={HandleEndTurn} className={`select-none text-xs h-6 bg-pink-700 rounded-xl font-bold transition-all ${gameInfo?.plays_remaining === 0 && "animate-pulse px-8"}`}>
+                                                <Button variant="default" disabled={!gameInfo?.turn_cards_drawn} onClick={HandleEndTurn} className={`max-md:scale-75 select-none text-xs h-6 bg-pink-700 rounded-xl font-bold transition-all ${gameInfo?.plays_remaining === 0 && "animate-pulse px-8"}`}>
                                                     END TURN
                                                 </Button>
                                             </div>
                                         )}
                                     </div>
-                                    <span className="text-sm font-medium mb-1">Your Hand</span>
+                                    <span className= "h-md:text-sm text-xs font-medium h-md:mb-1 max-h-md:hidden">Your Hand</span>
 
-                                    <ScrollArea className="w-full whitespace-nowrap">
-                                        <div className="flex gap-2 pb-4 px-2">
+                                    <ScrollArea className="w-full whitespace-nowrap ">
+                                        <div className="flex w-full gap-2 h-md:pb-4 h-md:px-2 max-h-md:scale-75 max-h-md:-my-3 max-h-md:-mx-10">
                                             {handCards?.map((card, i) => (
                                                 <GameCardSelectable key={i} {...card} />
                                             ))}
@@ -351,11 +356,11 @@ export default function GameRoom() {
 
 
 
-                            <ResizablePanel defaultSize={50} minSize={40}>
-                                <div className="h-full w-full bg-card rounded-md p-2 border shadow-sm flex flex-col gap-4">
+                            <ResizablePanel defaultSize={50} minSize={40} className= "max-h-md:-m-2">
+                                <div className="h-full w-full bg-card rounded-md p-2 border shadow-sm flex flex-col h-md:gap-4 gap-1 max-h-md:scale-90">
                                     {/* Bank Piles */}
                                     <div className={`flex flex-col gap-1 rounded-md transition-all ${selectedCardID !== null && "ring-2 hover:bg-sky-100 cursor-pointer"}`} onClick={() => HandlePlayCard("BankPile")}>
-                                        <span className="text-sm font-medium">Bank</span>
+                                        <span className= "h-md:text-sm font-medium text-xs">Bank</span>
                                         <ScrollArea className="w-full whitespace-nowrap">
 
                                             <div className="flex gap-2 px-2">
@@ -385,7 +390,7 @@ export default function GameRoom() {
 
                                     {/* Property Piles */}
                                     <div className={`flex flex-col gap-1 rounded-md transition-all ${selectedCardID !== null && "ring-2 hover:bg-sky-100 cursor-pointer"}`} onClick={() => HandlePlayCard("PropertyPile")}>
-                                        <span className="text-sm font-medium">Properties</span>
+                                        <span className= "h-md:text-sm font-medium text-xs">Properties</span>
                                         <ScrollArea className="w-full whitespace-nowrap">
                                             <div className="flex gap-2 px-2">
                                                 {currentPlayer && (
@@ -404,7 +409,7 @@ export default function GameRoom() {
                                                             pile={pile}
                                                         />
                                                     ))}
-                                                <Button variant="outline" className="h-16" onClick={HandleCreateNewPile}>
+                                                <Button variant="outline" className="w-9 h-14 h-md:h-16" onClick={HandleCreateNewPile}>
                                                     +
                                                 </Button>
                                             </div>

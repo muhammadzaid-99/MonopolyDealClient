@@ -1,0 +1,21 @@
+{
+  "name": "Monopoly Deal",
+  "short_name": "Monopoly",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#1a1a1a",
+  "orientation":"landscape",
+  "icons": [
+    {
+      "src": "/placeholder.jpg",
+      "sizes": "192x192",
+      "type": "image/jpg"
+    },
+    {
+      "src": "/placeholder.jpg",
+      "sizes": "512x512",
+      "type": "image/jpg"
+    }
+  ]
+}

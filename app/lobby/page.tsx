@@ -75,7 +75,7 @@ export default function GameLobby() {
 
   return (
    
-      <div className="min-h-screen bg-gradient-to-br from-green-100 to-blue-100 p-4">
+      <div className="h-dvh bg-gradient-to-br from-green-100 to-blue-100 p-4">
         <div className="max-w-2xl mx-auto space-y-6">
           <Card>
             <CardHeader className="text-center">
