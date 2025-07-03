@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { useRouter } from "next/navigation"
 import { useSocket } from "@/lib/SocketProvider"
+import Link from "next/link"
 
 export default function HomePage() {
   const [playerName, setPlayerName] = useState("")
@@ -56,7 +57,7 @@ export default function HomePage() {
     console.log("Creating room for player:", playerName)
     socket?.send(JSON.stringify({ type: "create-room", player_id: playerID, player_name: playerName }))
   }
-  
+
   const handleJoinRoom = () => {
     if (playerName.trim().length < 3 || !roomID.trim()) {
       alert("Please enter your name (at least 3 characters) and room ID.")
@@ -113,6 +114,9 @@ export default function HomePage() {
             <Button onClick={handleJoinRoom} variant="outline" className="w-full" size="lg">
               Join Room
             </Button>
+          </div>
+          <div className="flex w-full space-y-1 items-center justify-center">
+            <Link href="monopolydealrules.com" className="text-xs underline">How to play?</Link>
           </div>
         </CardContent>
       </Card>
