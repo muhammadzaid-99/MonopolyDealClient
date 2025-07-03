@@ -116,7 +116,7 @@ export default function HomePage() {
             </Button>
           </div>
           <div className="flex w-full space-y-1 items-center justify-center">
-            <Link href="monopolydealrules.com" className="text-xs underline">How to play?</Link>
+            <Link href="http://monopolydealrules.com" className="text-xs underline">How to play?</Link>
           </div>
         </CardContent>
       </Card>
