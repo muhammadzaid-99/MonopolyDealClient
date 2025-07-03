@@ -53,9 +53,11 @@ export function CenterPiles(gameInfo: GameInfo) {
       <div className="flex flex-col w-full rounded-md border shadow-inner h-full">
         {/* Discard Pile */}
         <ScrollArea className="h-md:h-32 h-16 bg-gray-50 flex flex-col gap-1 border text-center">
-          <div className="text-[10px] h-md:hidden font-semibold text-center p-2 border-b [text-wrap:balance] animate-pulse">
-            {ActionSentence(action)}
-          </div>
+          {action && (
+            <div className="text-[10px] h-md:hidden font-semibold text-center p-2 border-b [text-wrap:balance] animate-pulse">
+              {ActionSentence(action)}
+            </div>
+          )}
           {gameInfo?.messages?.map((msg, i) => (
             <div key={i} className="h-md:text-xs text-[8px] p-2 border-b select-none tracking-wide h-md:font-serif font-sans">
               {msg}
