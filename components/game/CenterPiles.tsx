@@ -52,14 +52,17 @@ export function CenterPiles(gameInfo: GameInfo) {
     <div className="flex flex-col items-center justify-center gap-4 h-full bg-white ">
       <div className="flex flex-col w-full rounded-md border shadow-inner h-full">
         {/* Discard Pile */}
-        <ScrollArea className="md:h-32 h-16 bg-gray-50 flex flex-col gap-1 border text-center">
+        <ScrollArea className="h-md:h-32 h-16 bg-gray-50 flex flex-col gap-1 border text-center">
+          <div className="text-[10px] h-md:hidden font-semibold text-center p-2 border-b [text-wrap:balance] animate-pulse">
+            {ActionSentence(action)}
+          </div>
           {gameInfo?.messages?.map((msg, i) => (
-            <div key={i} className="md:text-xs text-[8px] p-2 border-b select-none tracking-wide md:font-serif font-sans">
+            <div key={i} className="h-md:text-xs text-[8px] p-2 border-b select-none tracking-wide h-md:font-serif font-sans">
               {msg}
             </div>
           ))}
         </ScrollArea>
-        <div className=" flex flex-1 items-center justify-center text-xs max-md:scale-75 max-md:-m-4">
+        <div className=" flex flex-1 items-center justify-center text-xs max-h-md:scale-75 max-h-md:-m-4">
           {gameInfo?.top_card ? (
             <GameCardSelectable {...gameInfo?.top_card} NonSelectable />
           ) : (
@@ -68,13 +71,13 @@ export function CenterPiles(gameInfo: GameInfo) {
         </div>
         <div className="flex gap-1 items-center bg-gray-100 w-full justify-between">
           {/* Draw Pile */}
-          <Button className={`bg-slate-700 h-8 md:m-4 m-1 max-md:scale-75 rounded-md border self-end text-xs text-center shadow-inner ${playerID === gameInfo.current_turn_player_id && (!gameInfo.turn_cards_drawn || action == Action.DrawCards) && "animate-pulse"}`} onClick={HandleDrawCards}>
+          <Button className={`bg-slate-700 h-8 h-md:m-4 m-1 max-h-md:scale-75 rounded-md border self-end text-xs text-center shadow-inner ${playerID === gameInfo.current_turn_player_id && (!gameInfo.turn_cards_drawn || action == Action.DrawCards) && "animate-pulse"}`} onClick={HandleDrawCards}>
             Draw Cards
           </Button>
-          <div className="text-xs font-semibold text-center [text-wrap:balance]">
+          <div className="text-xs max-h-md:hidden font-semibold text-center [text-wrap:balance]">
             {ActionSentence(action)}
           </div>
-          <Button variant="secondary" className={` h-8 md:m-4 m-1 max-md:scale-75 rounded-md border self-end text-xs text-center shadow-inner ${"animate-pulse duration-1000"}`}
+          <Button variant="secondary" className={` h-8 h-md:m-4 m-1 max-h-md:scale-75 rounded-md border self-end text-xs text-center shadow-inner ${"animate-pulse duration-1000"}`}
             onClick={HandleContinue}
             disabled={(action != Action.Continue && action != Action.PayMoney && action != Action.Arrange)}
           >

@@ -333,7 +333,7 @@ export default function GameRoom() {
                                                         YOUR TURN
                                                     </Badge> */}
                                                 </div>
-                                                <Button variant="default" disabled={!gameInfo?.turn_cards_drawn} onClick={HandleEndTurn} className={`max-md:scale-75 select-none text-xs h-6 bg-pink-700 rounded-xl font-bold transition-all ${gameInfo?.plays_remaining === 0 && "animate-pulse px-8"}`}>
+                                                <Button variant="default" disabled={!gameInfo?.turn_cards_drawn} onClick={HandleEndTurn} className={`max-h-md:scale-75 select-none text-xs h-6 bg-pink-700 rounded-xl font-bold transition-all ${gameInfo?.plays_remaining === 0 && "animate-pulse px-8"}`}>
                                                     END TURN
                                                 </Button>
                                             </div>
