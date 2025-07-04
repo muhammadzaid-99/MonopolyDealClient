@@ -31,7 +31,7 @@ export default function GameLobby() {
   useEffect(() => {
     if (!socket) return;
     socket?.send(JSON.stringify({ type: "join-room", player_id: playerID, player_name: playerName, room_id: roomId }))
-  }, [])
+  }, [socket])
 
   useEffect(() => {
     if (!socket) return;
