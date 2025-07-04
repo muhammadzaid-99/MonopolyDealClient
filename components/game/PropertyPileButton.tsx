@@ -131,8 +131,8 @@ export function PropertyPileButton({ owner_id, pile, looseCards, isForLoose }: P
               <ScrollBar orientation="horizontal" />
             </ScrollArea>
           ) : (
-            <ScrollArea className="w-full whitespace-nowrap max-h-md:-m-3.5">
-              <div className="flex gap-2 px-2 pb-4 max-h-md:scale-[0.675] max-h-md:-my-5 max-h-md:-mx-10">
+            <ScrollArea className="w-full whitespace-nowrap max-h-md:-m-4">
+              <div className="flex gap-2 px-2 pb-4 max-h-md:scale-[0.675] max-h-md:-mx-10">
                 {propertyColors.map((color) => (
                   <button
                     key={color}

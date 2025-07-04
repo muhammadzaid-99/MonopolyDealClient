@@ -52,7 +52,7 @@ export function CenterPiles(gameInfo: GameInfo) {
     <div className="flex flex-col items-center justify-center gap-4 h-full bg-white ">
       <div className="flex flex-col w-full rounded-md border shadow-inner h-full">
         {/* Discard Pile */}
-        <ScrollArea className="h-md:h-32 h-16 bg-gray-50 flex flex-col gap-1 border text-center">
+        <ScrollArea className="h-md:h-32 h-14 bg-gray-50 flex flex-col gap-1 border text-center">
           {action && (
             <div className="text-[10px] h-md:hidden font-semibold text-center p-2 border-b [text-wrap:balance] animate-pulse">
               {ActionSentence(action)}
