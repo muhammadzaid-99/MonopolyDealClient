@@ -12,7 +12,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { CardType } from "@/lib/utils"
 import { BankPileButton } from "@/components/game/BankPileButton"
-import { Hand } from "lucide-react"
+import { Hand, Target } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 
@@ -226,7 +226,8 @@ export default function GameRoom() {
                                         <div className="font-bold h-md:text-lg text-sm px-2">
                                             <span>{player.Name} </span>{player?.HandCount ? (<>
                                                 <span className="font-semibold text-xs px-2 max-h-md:hidden">{player.HandCount} cards in hand</span>
-                                                <span className="font-normal text-xs px-2 h-md:hidden">Hand: {player.HandCount}</span>
+                                                {/* <span className="h-md:hidden"><Hand size={14} strokeWidth={1} /></span> */}
+                                                <span className="font-normal text-[10px] px-2 h-md:hidden tracking-wider">Hand: {player.HandCount}</span>
                                             </>
                                             ) : (<></>)}
                                         </div>
@@ -240,6 +241,9 @@ export default function GameRoom() {
                                                 <Badge variant="default" className="max-h-md:hidden select-none hover:bg-blue-700 bg-blue-700">
                                                     CURRENT TURN
                                                 </Badge>
+                                                <div className="h-md:hidden text-xs text-gray-700 select-none">
+                                                    <Target size={16} strokeWidth={1} />
+                                                </div>
                                             </div>
                                         )}
                                     </div>
@@ -304,35 +308,6 @@ export default function GameRoom() {
 
 
                                     <ResizablePanelGroup direction="vertical" className={`h-md:hidden ${players?.length < 3 && "max-h-md:hidden"}`}>
-                                        <ResizablePanel defaultSize={0} minSize={0} className={`h-md:hidden ${players?.length < 3 && "max-h-md:hidden"}`}>
-                                            {/* Bank Section */}
-                                            <div className="flex flex-col  gap-0.5 transition-all">
-                                                <span className="text-[10px] font-semibold px-2">Bank</span>
-                                                <ScrollArea className="w-full whitespace-nowrap">
-                                                    <div className="flex gap-1 px-2">
-                                                        {player?.BankCards &&
-                                                            Object.entries(
-                                                                player.BankCards.reduce<Record<number, CardInfo[]>>((acc, card) => {
-                                                                    acc[card.value] = acc[card.value] || [];
-                                                                    acc[card.value].push(card);
-                                                                    return acc;
-                                                                }, {})
-                                                            ).map(([value, cards]) => (
-                                                                <BankPileButton
-                                                                    key={`bank-group-${value}`}
-                                                                    count={cards?.length}
-                                                                    value={Number(value)}
-                                                                    cards={cards}
-                                                                />
-                                                            ))
-                                                        }
-                                                    </div>
-                                                    <ScrollBar orientation="horizontal" />
-                                                </ScrollArea>
-                                            </div>
-
-                                        </ResizablePanel>
-                                        <ResizableHandle withHandle className={`h-md:hidden ${players?.length < 3 && "max-h-md:hidden"}`} />
                                         <ResizablePanel defaultSize={100} minSize={0} className={`h-md:hidden ${players?.length < 3 && "max-h-md:hidden"}`}>
                                             {/* Property Section */}
                                             <div className="flex flex-col gap-0.5 transition-all">
@@ -361,6 +336,37 @@ export default function GameRoom() {
                                                 </ScrollArea>
                                             </div>
                                         </ResizablePanel>
+                                        <ResizableHandle withHandle className={`h-md:hidden ${players?.length < 3 && "max-h-md:hidden"}`} />
+                                        <ResizablePanel defaultSize={0} minSize={0} className={`h-md:hidden ${players?.length < 3 && "max-h-md:hidden"}`}>
+                                            {/* Bank Section */}
+                                            <div className="flex flex-col  gap-0.5 transition-all">
+                                                <span className="text-[10px] font-semibold px-2">Bank</span>
+                                                <ScrollArea className="w-full whitespace-nowrap">
+                                                    <div className="flex gap-1 px-2">
+                                                        {player?.BankCards &&
+                                                            Object.entries(
+                                                                player.BankCards.reduce<Record<number, CardInfo[]>>((acc, card) => {
+                                                                    acc[card.value] = acc[card.value] || [];
+                                                                    acc[card.value].push(card);
+                                                                    return acc;
+                                                                }, {})
+                                                            ).map(([value, cards]) => (
+                                                                <BankPileButton
+                                                                    key={`bank-group-${value}`}
+                                                                    count={cards?.length}
+                                                                    value={Number(value)}
+                                                                    cards={cards}
+                                                                />
+                                                            ))
+                                                        }
+                                                    </div>
+                                                    <ScrollBar orientation="horizontal" />
+                                                </ScrollArea>
+                                            </div>
+
+                                        </ResizablePanel>
+
+
                                     </ResizablePanelGroup>
                                 </div>
                             )
@@ -382,7 +388,7 @@ export default function GameRoom() {
                                                 {currentPlayer?.Name}
                                             </span>  {currentPlayer?.HandCount ? (<>
                                                 <span className="font-semibold text-xs px-2 max-h-md:hidden">{currentPlayer.HandCount} cards in hand</span>
-                                                <span className="font-normal text-xs px-2 h-md:hidden">Hand: {currentPlayer.HandCount}</span>
+                                                <span className="font-normal text-[10px] px-2 h-md:hidden tracking-wider">Hand: {currentPlayer.HandCount}</span>
                                             </>
                                             ) : (<></>)}
                                         </div>
