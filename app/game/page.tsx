@@ -117,6 +117,19 @@ export default function GameRoom() {
         socket?.send(JSON.stringify({ type: 'create-pile', player_id: playerID }))
     }
 
+    useEffect(() => {
+        const enableFullscreen = () => {
+            document.documentElement.requestFullscreen().catch(() => { });
+        };
+
+        window.addEventListener('click', enableFullscreen, { once: true });
+
+        return () => {
+            window.removeEventListener('click', enableFullscreen);
+        };
+    }, []);
+
+
 
     useEffect(() => {
         if (!socket) return;
@@ -236,7 +249,7 @@ export default function GameRoom() {
                                                         <Badge key={i} className="bg-blue-700 rounded-full h-md:h-5 h-md:min-w-5 h-3 min-w-3 px-1" />
                                                     ))) : (<></>)}
                                                 </div>
-                                                <Badge variant="default" className= "max-h-md:hidden select-none hover:bg-blue-700 bg-blue-700">
+                                                <Badge variant="default" className="max-h-md:hidden select-none hover:bg-blue-700 bg-blue-700">
                                                     CURRENT TURN
                                                 </Badge>
                                             </div>
@@ -309,7 +322,7 @@ export default function GameRoom() {
                     {/* Bottom 1/3 Area: Resizable Left and Right Panels */}
                     <div className="flex-[1] h-md:p-2">
                         <ResizablePanelGroup direction="horizontal" className="">
-                            <ResizablePanel defaultSize={50} minSize={40} className= "max-h-md:-m-2">
+                            <ResizablePanel defaultSize={50} minSize={40} className="max-h-md:-m-2">
                                 <div className="h-full w-full bg-card rounded-md border shadow-sm p-2  flex flex-col max-h-md:scale-90">
                                     <div className="flex justify-between items-center">
                                         <div className="font-bold h-md:text-lg text-sm">
@@ -339,7 +352,7 @@ export default function GameRoom() {
                                             </div>
                                         )}
                                     </div>
-                                    <span className= "h-md:text-sm text-xs font-medium h-md:mb-1 max-h-md:hidden">Your Hand</span>
+                                    <span className="h-md:text-sm text-xs font-medium h-md:mb-1 max-h-md:hidden">Your Hand</span>
 
                                     <ScrollArea className="w-full whitespace-nowrap ">
                                         <div className="flex w-full gap-2 h-md:pb-4 h-md:px-2 max-h-md:scale-75 max-h-md:-my-3 max-h-md:-mx-10">
@@ -356,11 +369,11 @@ export default function GameRoom() {
 
 
 
-                            <ResizablePanel defaultSize={50} minSize={40} className= "max-h-md:-m-2">
+                            <ResizablePanel defaultSize={50} minSize={40} className="max-h-md:-m-2">
                                 <div className="h-full w-full bg-card rounded-md p-2 border shadow-sm flex flex-col h-md:gap-4 gap-1 max-h-md:scale-90">
                                     {/* Bank Piles */}
                                     <div className={`flex flex-col gap-1 rounded-md transition-all ${selectedCardID !== null && "ring-2 hover:bg-sky-100 cursor-pointer"}`} onClick={() => HandlePlayCard("BankPile")}>
-                                        <span className= "h-md:text-sm font-medium text-xs">Bank</span>
+                                        <span className="h-md:text-sm font-medium text-xs">Bank</span>
                                         <ScrollArea className="w-full whitespace-nowrap">
 
                                             <div className="flex gap-2 px-2">
@@ -390,7 +403,7 @@ export default function GameRoom() {
 
                                     {/* Property Piles */}
                                     <div className={`flex flex-col gap-1 rounded-md transition-all ${selectedCardID !== null && "ring-2 hover:bg-sky-100 cursor-pointer"}`} onClick={() => HandlePlayCard("PropertyPile")}>
-                                        <span className= "h-md:text-sm font-medium text-xs">Properties</span>
+                                        <span className="h-md:text-sm font-medium text-xs">Properties</span>
                                         <ScrollArea className="w-full whitespace-nowrap">
                                             <div className="flex gap-2 px-2">
                                                 {currentPlayer && (
