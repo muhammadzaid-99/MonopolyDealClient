@@ -56,8 +56,9 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 
         socketRef.current.onclose = (event) => {
             console.log("WebSocket disconnected");
-            setPlayerID(null);
+            // setPlayerID(null);
         };
+
 
         return () => {
             socketRef.current?.close();

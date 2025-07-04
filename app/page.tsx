@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -11,9 +11,14 @@ import Link from "next/link"
 
 export default function HomePage() {
   const [playerName, setPlayerName] = useState("")
+  const playerNameRef = useRef(playerName)
   const [roomID, setRoomID] = useState("")
   const router = useRouter()
   const { socket, playerID } = useSocket()
+
+  useEffect(() => {
+    playerNameRef.current = playerName
+  }, [playerName])
 
   useEffect(() => {
     if (!socket) return;
@@ -27,7 +32,7 @@ export default function HomePage() {
           console.log(msg)
           if (msg.join_status === true || msg.room_id) {
             setTimeout(() => {
-              router.push(`/lobby?room_id=${msg.room_id}`);
+              router.push(`/lobby?room_id=${encodeURIComponent(msg.room_id)}&player_name=${encodeURIComponent(playerNameRef.current)}`);
             }, 0);
           }
           break;
@@ -35,7 +40,7 @@ export default function HomePage() {
           console.log(msg)
           if (msg.join_status === true || msg.room_id) {
             setTimeout(() => {
-              router.push(`/lobby?room_id=${msg.room_id}`);
+              router.push(`/lobby?room_id=${encodeURIComponent(msg.room_id)}&player_name=${encodeURIComponent(playerNameRef.current)}`);
             }, 0);
           }
           break;
@@ -77,19 +82,27 @@ export default function HomePage() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="playerName">Player Name</Label>
+            {/* <Label htmlFor="playerName">Player Name</Label> */}
             <Input
               id="playerName"
-              placeholder="Enter your name"
+              placeholder="Player Name"
               value={playerName}
               onChange={(e) => setPlayerName(e.target.value)}
               className="w-full"
             />
           </div>
-
-          <Button onClick={handleCreateRoom} className="w-full bg-green-600 hover:bg-green-700" size="lg">
-            Create Room
-          </Button>
+          <div className="flex gap-2 w-full items-center">
+            <Input
+              id="roomId"
+              placeholder="Room ID"
+              value={roomID}
+              onChange={(e) => setRoomID(e.target.value)}
+              className="w-3/5"
+            />
+            <Button onClick={handleJoinRoom} className="w-2/5 text-white bg-green-600 hover:bg-green-700" size="default">
+              Join Room
+            </Button>
+          </div>
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
@@ -99,22 +112,10 @@ export default function HomePage() {
               <span className="bg-white px-2 text-gray-500">Or</span>
             </div>
           </div>
+          <Button onClick={handleCreateRoom} variant="outline" className="w-full shadow" size="lg">
+            Create Room
+          </Button>
 
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="roomId">Room ID</Label>
-              <Input
-                id="roomId"
-                placeholder="Enter room ID"
-                value={roomID}
-                onChange={(e) => setRoomID(e.target.value)}
-                className="w-full"
-              />
-            </div>
-            <Button onClick={handleJoinRoom} variant="outline" className="w-full" size="lg">
-              Join Room
-            </Button>
-          </div>
           <div className="flex w-full mt-1 items-center justify-center gap-2">
             <Link href="http://monopolydealrules.com" rel="noopener noreferrer" target="_blank" className="text-xs underline">How to play?</Link>
             <Link href="http://github.com/muhammadzaid-99" rel="noopener noreferrer" target="_blank" className="text-xs underline">Developer</Link>
