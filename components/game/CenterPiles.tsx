@@ -59,7 +59,7 @@ export function CenterPiles(gameInfo: GameInfo) {
             </div>
           )}
           {gameInfo?.messages?.map((msg, i) => (
-            <div key={i} className="h-md:text-xs text-[8px] p-2 border-b select-none tracking-wide h-md:font-serif font-sans">
+            <div key={i} className="h-md:text-xs text-[9px] p-2 border-b select-none tracking-wide h-md:font-serif font-sans">
               {msg}
             </div>
           ))}
