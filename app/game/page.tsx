@@ -12,7 +12,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { CardType } from "@/lib/utils"
 import { BankPileButton } from "@/components/game/BankPileButton"
-import { Hand, Target } from "lucide-react"
+import { Hand, Landmark, Target } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 
@@ -38,6 +38,7 @@ interface Player {
     // PropertyCompletion: Record<string, number>,
     PropertyPiles: Map<string, PropertyPile>,
     HandCount: number,
+    BankSum: number,
 }
 
 export interface CardInfo {
@@ -79,6 +80,7 @@ export enum Action {
     Wait = "wait"
 }
 
+
 export default function GameRoom() {
 
     const { action, setAction, socket, playerID, selectedCardID, setSelectedCardID } = useSocket()
@@ -87,6 +89,7 @@ export default function GameRoom() {
     const [currentPlayer, setCurrentPlayer] = useState<Player>()
     const [handCards, setHandCards] = useState<CardInfo[]>()
     const [gameInfo, setGameInfo] = useState<GameInfo>()
+    const [showBank, setShowBank] = useState<Map<string, boolean>>(new Map())
 
 
 
@@ -223,13 +226,25 @@ export default function GameRoom() {
                             return (
                                 <div key={i} className={`bg-card rounded-md border shadow-sm p-1 flex flex-col gap-2 max-h-md:scale-90 max-h-md:-m-3.5 ${players?.length < 3 && "row-span-2"} ${(action == Action.SelectOpponent || action == Action.SelectYourPropertySetAndOpponent) && "ring-2 hover:bg-sky-100 cursor-pointer"}`} onClick={() => HandleSelectOpponent(player.ID)}>
                                     <div className="flex justify-between items-center w-full">
-                                        <div className="font-bold h-md:text-lg text-sm px-2">
-                                            <span>{player.Name} </span>{player?.HandCount ? (<>
-                                                <span className="font-semibold text-xs px-2 max-h-md:hidden">{player.HandCount} cards in hand</span>
-                                                {/* <span className="h-md:hidden"><Hand size={14} strokeWidth={1} /></span> */}
-                                                <span className="font-normal text-[10px] px-2 h-md:hidden tracking-wider">Hand: {player.HandCount}</span>
-                                            </>
-                                            ) : (<></>)}
+                                        <div className="flex items-center gap-2 font-bold h-md:text-lg text-xs px-2">
+                                            <span className="w-20 h-md:w-40 overflow-hidden">{player.Name}</span>
+                                            <div className="flex items-center">
+                                                {player?.HandCount ? (
+                                                    <div className="flex items-center">
+                                                        <Hand size={11} className="h-md:hidden" />
+                                                        <Hand size={14} className="max-h-md:hidden" />
+                                                        <span className="font-normal md:text-sm text-[10px] px-1 tracking-wider">{player.HandCount}</span>
+                                                    </div>
+
+                                                ) : <></>}
+                                                {player?.BankSum ? (
+                                                    <div className="flex items-center">
+                                                        <Landmark size={11} className="h-md:hidden" />
+                                                        <Landmark size={14} className="max-h-md:hidden" />
+                                                        <span className="font-normal md:text-sm text-[10px] px-1 tracking-wider">${player.BankSum}</span>
+                                                    </div>
+                                                ) : <></>}
+                                            </div>
                                         </div>
                                         {player.ID === gameInfo?.current_turn_player_id && (
                                             <div className="font-bold text-lg flex gap-1">
@@ -247,7 +262,7 @@ export default function GameRoom() {
                                             </div>
                                         )}
                                     </div>
-                                    <Separator />
+                                    <Separator className="" />
 
 
 
@@ -307,67 +322,79 @@ export default function GameRoom() {
                                     </div>
 
 
-                                    <ResizablePanelGroup direction="vertical" className={`h-md:hidden ${players?.length < 3 && "max-h-md:hidden"}`}>
-                                        <ResizablePanel defaultSize={100} minSize={0} className={`h-md:hidden ${players?.length < 3 && "max-h-md:hidden"}`}>
-                                            {/* Property Section */}
-                                            <div className="flex flex-col gap-0.5 transition-all">
-                                                <span className="text-[10px] font-semibold px-2">Properties</span>
-                                                <ScrollArea className="w-full whitespace-nowrap">
-                                                    <div className="flex gap-1 px-2">
-                                                        <PropertyPileButton
-                                                            key={`prop-${player.ID}-${"loose-pile"}`}
-                                                            owner_id={player.ID}
-                                                            looseCards={player.LooseCards}
-                                                            isForLoose
-                                                        />
-                                                        {player?.PropertyPiles &&
-                                                            Object.entries(player.PropertyPiles).map(([id, pile]: [any, PropertyPile]) => {
-                                                                return (
-                                                                    <PropertyPileButton
-                                                                        key={`prop-${player.ID}-${id}`}
-                                                                        owner_id={player.ID}
-                                                                        pile={pile}
+                                    {/* FOR MOBILE DEVICES */}
+                                    <div className={`flex flex-col relative h-md:hidden ${players?.length < 3 && "max-h-md:hidden"}`}>
+                                        <button onClick={() => setShowBank(prev => {
+                                            const newMap = new Map(prev);
+                                            newMap.set(player.ID, !prev.get(player.ID));
+                                            return newMap;
+                                        })}
+                                            className="text-[10px] font-bold absolute -top-1 right-1 rounded-sm text-white shadow-sm px-1 bg-pink-700">
+                                            {showBank && showBank.get(player?.ID) == true ? (
+                                                "B"
+                                            ) : (
+                                                "P"
+                                            )}
+                                        </button>
+                                        <div>
+                                            {showBank && showBank.get(player?.ID) == true ? (
+                                                <div className="flex flex-col  gap-0.5 transition-all">
+                                                    {/* Bank Section */}
+                                                    <span className="text-[10px] font-semibold px-2">Bank</span>
+                                                    <ScrollArea className="w-full whitespace-nowrap">
+                                                        <div className="flex gap-1 px-2">
+                                                            {player?.BankCards &&
+                                                                Object.entries(
+                                                                    player.BankCards.reduce<Record<number, CardInfo[]>>((acc, card) => {
+                                                                        acc[card.value] = acc[card.value] || [];
+                                                                        acc[card.value].push(card);
+                                                                        return acc;
+                                                                    }, {})
+                                                                ).map(([value, cards]) => (
+                                                                    <BankPileButton
+                                                                        key={`bank-group-${value}`}
+                                                                        count={cards?.length}
+                                                                        value={Number(value)}
+                                                                        cards={cards}
                                                                     />
-                                                                );
-                                                            })
-                                                        }
-                                                    </div>
-                                                    <ScrollBar orientation="horizontal" />
-                                                </ScrollArea>
-                                            </div>
-                                        </ResizablePanel>
-                                        <ResizableHandle withHandle className={`h-md:hidden ${players?.length < 3 && "max-h-md:hidden"}`} />
-                                        <ResizablePanel defaultSize={0} minSize={0} className={`h-md:hidden ${players?.length < 3 && "max-h-md:hidden"}`}>
-                                            {/* Bank Section */}
-                                            <div className="flex flex-col  gap-0.5 transition-all">
-                                                <span className="text-[10px] font-semibold px-2">Bank</span>
-                                                <ScrollArea className="w-full whitespace-nowrap">
-                                                    <div className="flex gap-1 px-2">
-                                                        {player?.BankCards &&
-                                                            Object.entries(
-                                                                player.BankCards.reduce<Record<number, CardInfo[]>>((acc, card) => {
-                                                                    acc[card.value] = acc[card.value] || [];
-                                                                    acc[card.value].push(card);
-                                                                    return acc;
-                                                                }, {})
-                                                            ).map(([value, cards]) => (
-                                                                <BankPileButton
-                                                                    key={`bank-group-${value}`}
-                                                                    count={cards?.length}
-                                                                    value={Number(value)}
-                                                                    cards={cards}
-                                                                />
-                                                            ))
-                                                        }
-                                                    </div>
-                                                    <ScrollBar orientation="horizontal" />
-                                                </ScrollArea>
-                                            </div>
+                                                                ))
+                                                            }
+                                                        </div>
+                                                        <ScrollBar orientation="horizontal" />
+                                                    </ScrollArea>
+                                                </div>
+                                            ) : (
+                                                <div className="flex flex-col gap-0.5 transition-all">
+                                                    {/* Property Section */}
+                                                    <span className="text-[10px] font-semibold px-2">Properties</span>
+                                                    <ScrollArea className="w-full whitespace-nowrap">
+                                                        <div className="flex gap-1 px-2">
+                                                            <PropertyPileButton
+                                                                key={`prop-${player.ID}-${"loose-pile"}`}
+                                                                owner_id={player.ID}
+                                                                looseCards={player.LooseCards}
+                                                                isForLoose
+                                                            />
+                                                            {player?.PropertyPiles &&
+                                                                Object.entries(player.PropertyPiles).map(([id, pile]: [any, PropertyPile]) => {
+                                                                    return (
+                                                                        <PropertyPileButton
+                                                                            key={`prop-${player.ID}-${id}`}
+                                                                            owner_id={player.ID}
+                                                                            pile={pile}
+                                                                        />
+                                                                    );
+                                                                })
+                                                            }
+                                                        </div>
+                                                        <ScrollBar orientation="horizontal" />
+                                                    </ScrollArea>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
 
-                                        </ResizablePanel>
 
-
-                                    </ResizablePanelGroup>
                                 </div>
                             )
                         })}
@@ -383,14 +410,27 @@ export default function GameRoom() {
                             <ResizablePanel defaultSize={50} minSize={40} className="max-h-md:-m-2">
                                 <div className="h-full w-full bg-card rounded-md border shadow-sm p-2  flex flex-col max-h-md:scale-90">
                                     <div className="flex justify-between items-center">
-                                        <div className="font-bold h-md:text-lg text-sm">
-                                            <span>
+                                        <div className="font-bold h-md:text-lg text-xs flex items-center">
+                                            <span className="h-md:w-40 w-20">
                                                 {currentPlayer?.Name}
-                                            </span>  {currentPlayer?.HandCount ? (<>
-                                                <span className="font-semibold text-xs px-2 max-h-md:hidden">{currentPlayer.HandCount} cards in hand</span>
-                                                <span className="font-normal text-[10px] px-2 h-md:hidden tracking-wider">Hand: {currentPlayer.HandCount}</span>
-                                            </>
-                                            ) : (<></>)}
+                                            </span>
+                                            <div className="flex items-center">
+                                                {currentPlayer?.HandCount ? (
+                                                    <div className="flex items-center">
+                                                        <Hand size={11} className="h-md:hidden" />
+                                                        <Hand size={14} className="max-h-md:hidden" />
+                                                        <span className="font-normal md:text-sm text-[10px] px-1 tracking-wider">{currentPlayer.HandCount}</span>
+                                                    </div>
+
+                                                ) : <></>}
+                                                {currentPlayer?.BankSum ? (
+                                                    <div className="flex items-center">
+                                                        <Landmark size={11} className="h-md:hidden" />
+                                                        <Landmark size={14} className="max-h-md:hidden" />
+                                                        <span className="font-normal md:text-sm text-[10px] px-1 tracking-wider">${currentPlayer.BankSum}</span>
+                                                    </div>
+                                                ) : <></>}
+                                            </div>
                                         </div>
                                         {currentPlayer?.ID === gameInfo?.current_turn_player_id && (
                                             <div className="flex gap-1">
